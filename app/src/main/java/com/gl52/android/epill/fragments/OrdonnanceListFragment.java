@@ -5,14 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gl52.android.epill.R;
 import com.gl52.android.epill.activities.OrdonnanceActivity;
+import com.gl52.android.epill.activities.OrdonnanceInfoActivity;
 import com.gl52.android.epill.entities.Medicament;
 import com.gl52.android.epill.entities.Ordonnance;
 import com.gl52.android.epill.entities.OrdonnanceLab;
@@ -47,6 +53,7 @@ public class OrdonnanceListFragment extends ListFragment {
             TextView description = (TextView)convertView.findViewById(R.id.ordonnance_list_item_description);
             description.setText(o.getDescription());
 
+
             return convertView;
         }
     }
@@ -55,9 +62,18 @@ public class OrdonnanceListFragment extends ListFragment {
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.ordonnanceList_title);
+
         mOrdonnances = OrdonnanceLab.get(getActivity()).getOrdonnances();
         OrdonnanceAdapter adapter = new OrdonnanceAdapter(mOrdonnances);
         setListAdapter(adapter);
+        setHasOptionsMenu(true);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_ordonnance_list, menu);
     }
 
     @Override
@@ -69,8 +85,18 @@ public class OrdonnanceListFragment extends ListFragment {
         startActivity(i);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_item_new_ordonnance:
+                Intent i = new Intent(getActivity(), OrdonnanceInfoActivity.class);
+                startActivity(i);
+                return true;
+            default:return super.onOptionsItemSelected(item);
+        }
+    }
 
-    //重新返回列表项后刷新信息
+    //Refresh the ordonnance list data when resume to the ordonnance list page
     @Override
     public void onResume() {
         super.onResume();

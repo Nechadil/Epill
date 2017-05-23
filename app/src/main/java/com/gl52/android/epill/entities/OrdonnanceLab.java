@@ -25,7 +25,7 @@ public class OrdonnanceLab {
         }
         return null;
     }
-
+    //initiate the ordonnance Lab
     private OrdonnanceLab(Context appContext){
         mAppContext = appContext;
         mOrdonnances = new ArrayList<Ordonnance>();
@@ -37,6 +37,7 @@ public class OrdonnanceLab {
         ArrayList<Medicament> mLab = new ArrayList<Medicament>();
         Medicament m1 = new Medicament();
         m1.setName("medicament 1 ");
+        m1.setId("0021");
         m1.setDuration(10);
         m1.setFrequence(3);
         mLab.add(m1);
@@ -54,5 +55,10 @@ public class OrdonnanceLab {
             sOrdonnanceLab = new OrdonnanceLab(c.getApplicationContext());
         }
         return  sOrdonnanceLab;
+    }
+
+    //// TODO: 2017/5/23 Save ordonnance in the DB
+    public void  addOrdonnance(Ordonnance ordonnance){
+        mOrdonnances.add(ordonnance);
     }
 }

@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Epill</string>
     <string name="ordonnanceList_title">Ordonnance List</string>
+    <string name="medicament_name">Name</string>
+    <string name="frequence_label">Frequence</string>
+    <string name="duration_label">Duration</string>
+    <string name="new_ordonnance">Add new ordonnance</string>
+    <string name="ordonnance_name">Ordonnance Name</string>
+    <string name="ordonnance_mailDoc">Doctor\'s mail</string>
+    <string name="ordonnance_description">Ordonnance Description</string>
 </resources>

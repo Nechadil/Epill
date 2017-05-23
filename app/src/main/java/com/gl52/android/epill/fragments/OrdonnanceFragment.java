@@ -1,37 +1,30 @@
 package com.gl52.android.epill.fragments;
 
+import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.gl52.android.epill.R;
-import com.gl52.android.epill.activities.OrdonnanceActivity;
+import com.gl52.android.epill.activities.MedicamentInfoActivity;
 import com.gl52.android.epill.entities.Medicament;
 import com.gl52.android.epill.entities.Ordonnance;
 import com.gl52.android.epill.entities.OrdonnanceLab;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Created by dc on 2017/5/17.
  */
 
-public class OrdonnanceFragment extends ListFragment{
+public class OrdonnanceFragment extends ListFragment {
     private ArrayList<Medicament> mMedicaments;
     private Ordonnance mOrdonnance;
     public static final String EXTRA_ORDONNANCE_ID = "com.gl52.android.epill.ordonnance_id";
@@ -47,12 +40,17 @@ public class OrdonnanceFragment extends ListFragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle("Ordonnance Information");
         //Get the ordonnance with the id
         String ordonnanceId = (String)getArguments().getString(EXTRA_ORDONNANCE_ID);
         mOrdonnance = OrdonnanceLab.get(getActivity()).getOrdonnance(ordonnanceId);
-        MedicamentAdapter adapter = new MedicamentAdapter(mOrdonnance.getMedicaments());
-        setListAdapter(adapter);
-
+        ArrayList<Medicament> medicamentArray = mOrdonnance.getMedicaments();
+        if (medicamentArray == null) {
+            //TODO: 2017/5/23 remove the loading circle
+        } else {
+            MedicamentAdapter adapter = new MedicamentAdapter(mOrdonnance.getMedicaments());
+            setListAdapter(adapter);
+        }
     }
 
     private class MedicamentAdapter extends ArrayAdapter<Medicament> {
@@ -64,15 +62,15 @@ public class OrdonnanceFragment extends ListFragment{
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             if(convertView == null){
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_ordonnance, null);
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_medicament, null);
             }
             Medicament m = getItem(position);
 
-            TextView name = (TextView)convertView.findViewById(R.id.ordonnance_list_item_name);
+            TextView name = (TextView)convertView.findViewById(R.id.medicament_list_item_name);
 
             name.setText(m.getName());
 
-            TextView description = (TextView)convertView.findViewById(R.id.ordonnance_list_item_description);
+            TextView description = (TextView)convertView.findViewById(R.id.medicament_list_item_frequence);
             description.setText(m.getFrequence()+" Times in"+m.getDuration()+" Days");
 
             return convertView;
@@ -81,10 +79,12 @@ public class OrdonnanceFragment extends ListFragment{
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Medicament m = ((OrdonnanceFragment.MedicamentAdapter)getListAdapter()).getItem(position);
+        Medicament m = ((MedicamentAdapter)getListAdapter()).getItem(position);
         //Start ordonnance activity
-        Intent i = new Intent(getActivity(), OrdonnanceActivity.class);
+        Intent i = new Intent(getActivity(), MedicamentInfoActivity.class);
         i.putExtra(MedicamentFragment.EXTRA_MEDICAMENT_ID, m.getId());
+        i.putExtra(OrdonnanceFragment.EXTRA_ORDONNANCE_ID,mOrdonnance.getId());
         startActivity(i);
     }
+
 }

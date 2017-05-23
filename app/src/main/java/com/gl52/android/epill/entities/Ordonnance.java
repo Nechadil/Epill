@@ -11,6 +11,8 @@ public class Ordonnance {
     private String name;
     private String mailDoc;
     private String description;
+    //To generate an id, to be removed after the insert of the DBConnection
+    private static int sId = 100;
 
     public String getDescription() {
         return description;
@@ -22,8 +24,10 @@ public class Ordonnance {
 
     private ArrayList<Medicament> mMedicaments;
 
+    //Initiacte an ordonnance
     public Ordonnance(){
-
+        this.id = (sId+1)+"";
+        sId++;
     }
 
     public String getId() {
@@ -57,4 +61,14 @@ public class Ordonnance {
     public void setMedicaments(ArrayList<Medicament> medicaments) {
         mMedicaments = medicaments;
     }
+
+    public Medicament getMedicament(String medicamentId){
+        for (Medicament m:mMedicaments){
+            if (m.getId().equals(medicamentId)){
+                return m;
+            }
+        }
+        return null;
+    }
+
 }
