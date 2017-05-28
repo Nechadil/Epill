@@ -12,15 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.OrdonnanceListActivity">
-
-        </activity>
-        <activity android:name=".activities.MainActivity"/>
-        <activity android:name=".activities.OrdonnanceActivity"/>
         <activity android:name=".activities.MedicamentInfoActivity"/>
-        <activity android:name=".activities.AddOrUpdateActivity"/>
         <activity android:name=".activities.OrdonnanceInfoActivity"/>
-        <activity android:name=".activities.TestActivity">
+        <activity android:name=".activities.MainActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN"/>
 

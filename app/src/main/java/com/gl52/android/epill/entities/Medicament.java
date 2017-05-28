@@ -1,10 +1,13 @@
 package com.gl52.android.epill.entities;
 
+import java.util.ArrayList;
+
 /**
  * Created by dc on 2017/5/16.
  */
 
 public class Medicament {
+    private static int sId = 100;
     public String getId() {
         return id;
     }
@@ -15,8 +18,8 @@ public class Medicament {
 
     private String id;
     private String name;
-    private int frequence;
-    private int duration;
+    private String frequence;
+    private String duration;
 
     public String getName() {
         return name;
@@ -26,19 +29,19 @@ public class Medicament {
         this.name = name;
     }
 
-    public int getFrequence() {
+    public String getFrequence() {
         return frequence;
     }
 
-    public void setFrequence(int frequence) {
+    public void setFrequence(String frequence) {
         this.frequence = frequence;
     }
 
-    public int getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 }

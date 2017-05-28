@@ -18,7 +18,8 @@
         style="?android:listSeparatorTextViewStyle"/>
     <EditText android:id="@+id/medicament_frequence"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
+              android:layout_height="wrap_content"
+              android:digits="0123456789"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -27,7 +28,8 @@
         style="?android:listSeparatorTextViewStyle"/>
     <EditText android:id="@+id/medicament_duration"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
+              android:layout_height="wrap_content"
+              android:digits="0123456789"/>
 
     <Button
         android:id="@+id/medicament_confirm"

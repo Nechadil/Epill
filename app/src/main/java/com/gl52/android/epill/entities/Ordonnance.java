@@ -26,8 +26,7 @@ public class Ordonnance {
 
     //Initiacte an ordonnance
     public Ordonnance(){
-        this.id = (sId+1)+"";
-        sId++;
+        this.mMedicaments = new ArrayList<Medicament>();
     }
 
     public String getId() {

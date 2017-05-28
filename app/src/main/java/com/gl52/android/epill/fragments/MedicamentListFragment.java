@@ -1,6 +1,5 @@
 package com.gl52.android.epill.fragments;
 
-import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,33 +23,32 @@ import java.util.ArrayList;
  * Created by dc on 2017/5/17.
  */
 
-public class OrdonnanceFragment extends ListFragment {
+public class MedicamentListFragment extends ListFragment {
     private ArrayList<Medicament> mMedicaments;
     private Ordonnance mOrdonnance;
     public static final String EXTRA_ORDONNANCE_ID = "com.gl52.android.epill.ordonnance_id";
 
     //Register data in the Bundle
-    public static OrdonnanceFragment newInstance(String ordonnanceId){
+    public static MedicamentListFragment newInstance(String ordonnanceId){
         Bundle args = new Bundle();
         args.putString(EXTRA_ORDONNANCE_ID, ordonnanceId);
-        OrdonnanceFragment fragment = new OrdonnanceFragment();
+        MedicamentListFragment fragment = new MedicamentListFragment();
         fragment.setArguments(args);
         return fragment;
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Ordonnance Information");
         //Get the ordonnance with the id
         String ordonnanceId = (String)getArguments().getString(EXTRA_ORDONNANCE_ID);
         mOrdonnance = OrdonnanceLab.get(getActivity()).getOrdonnance(ordonnanceId);
-        ArrayList<Medicament> medicamentArray = mOrdonnance.getMedicaments();
-        if (medicamentArray == null) {
-            //TODO: 2017/5/23 remove the loading circle
-        } else {
-            MedicamentAdapter adapter = new MedicamentAdapter(mOrdonnance.getMedicaments());
-            setListAdapter(adapter);
+
+        if(mOrdonnance == null){
+            mOrdonnance = OrdonnanceLab.get(getActivity()).getTemporaryOrdonnance();
         }
+        ArrayList<Medicament> medicamentArray = mOrdonnance.getMedicaments();
+        MedicamentAdapter adapter = new MedicamentAdapter(medicamentArray);
+        setListAdapter(adapter);
     }
 
     private class MedicamentAdapter extends ArrayAdapter<Medicament> {
@@ -71,7 +69,7 @@ public class OrdonnanceFragment extends ListFragment {
             name.setText(m.getName());
 
             TextView description = (TextView)convertView.findViewById(R.id.medicament_list_item_frequence);
-            description.setText(m.getFrequence()+" Times in"+m.getDuration()+" Days");
+            description.setText(m.getFrequence()+" times/day in "+m.getDuration()+" Days");
 
             return convertView;
         }
@@ -82,9 +80,14 @@ public class OrdonnanceFragment extends ListFragment {
         Medicament m = ((MedicamentAdapter)getListAdapter()).getItem(position);
         //Start ordonnance activity
         Intent i = new Intent(getActivity(), MedicamentInfoActivity.class);
-        i.putExtra(MedicamentFragment.EXTRA_MEDICAMENT_ID, m.getId());
-        i.putExtra(OrdonnanceFragment.EXTRA_ORDONNANCE_ID,mOrdonnance.getId());
+        i.putExtra(MedicamentInfoFragment.EXTRA_MEDICAMENT_ID, m.getId());
+        i.putExtra(MedicamentListFragment.EXTRA_ORDONNANCE_ID,mOrdonnance.getId());
         startActivity(i);
+    }
+
+    public void onResume() {
+        super.onResume();
+        ((MedicamentListFragment.MedicamentAdapter)getListAdapter()).notifyDataSetChanged();
     }
 
 }

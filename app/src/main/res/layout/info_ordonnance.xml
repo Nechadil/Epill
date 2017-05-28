@@ -29,7 +29,6 @@
     <EditText android:id="@+id/ordonnance_description"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"/>
-
     <Button
         android:id="@+id/medicament_confirm"
         android:layout_width="match_parent"
@@ -37,5 +36,20 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="Confirm"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/medicament_information"
+        style="?android:listSeparatorTextViewStyle"/>
+
+    <Button
+        android:id="@+id/medicament_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Add medicine"/>
+
 
 </LinearLayout>

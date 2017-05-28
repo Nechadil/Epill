@@ -3,6 +3,7 @@ package com.gl52.android.epill.entities;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -12,6 +13,17 @@ import java.util.UUID;
 public class OrdonnanceLab {
     private static OrdonnanceLab sOrdonnanceLab;
     private ArrayList<Ordonnance> mOrdonnances;
+    private Ordonnance mTemporaryOrdonnance;
+    private static int id = 100;
+
+    public Ordonnance getTemporaryOrdonnance() {
+        return mTemporaryOrdonnance;
+    }
+
+    public void setTemporaryOrdonnance(Ordonnance temporaryOrdonnance) {
+        mTemporaryOrdonnance = temporaryOrdonnance;
+    }
+
     private Context mAppContext;
 
     public ArrayList<Ordonnance> getOrdonnances() {
@@ -38,8 +50,8 @@ public class OrdonnanceLab {
         Medicament m1 = new Medicament();
         m1.setName("medicament 1 ");
         m1.setId("0021");
-        m1.setDuration(10);
-        m1.setFrequence(3);
+        m1.setDuration("10");
+        m1.setFrequence("3");
         mLab.add(m1);
         ordonnance1.setMedicaments(mLab);
         Ordonnance ordonnance2 = new Ordonnance();
@@ -59,6 +71,16 @@ public class OrdonnanceLab {
 
     //// TODO: 2017/5/23 Save ordonnance in the DB
     public void  addOrdonnance(Ordonnance ordonnance){
+        if(ordonnance.getId() == null){
+            ordonnance.setId(id+"");
+            id++;
+        }
+        for (Medicament m:ordonnance.getMedicaments()){
+            if(m.getId() == null){
+                m.setId(id+"");
+                id++;
+            }
+        }
         mOrdonnances.add(ordonnance);
     }
 }

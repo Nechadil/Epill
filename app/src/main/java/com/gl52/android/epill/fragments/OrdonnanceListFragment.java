@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,12 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gl52.android.epill.R;
-import com.gl52.android.epill.activities.OrdonnanceActivity;
 import com.gl52.android.epill.activities.OrdonnanceInfoActivity;
-import com.gl52.android.epill.entities.Medicament;
 import com.gl52.android.epill.entities.Ordonnance;
 import com.gl52.android.epill.entities.OrdonnanceLab;
 
@@ -62,7 +58,6 @@ public class OrdonnanceListFragment extends ListFragment {
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.ordonnanceList_title);
-
         mOrdonnances = OrdonnanceLab.get(getActivity()).getOrdonnances();
         OrdonnanceAdapter adapter = new OrdonnanceAdapter(mOrdonnances);
         setListAdapter(adapter);
@@ -76,20 +71,24 @@ public class OrdonnanceListFragment extends ListFragment {
         inflater.inflate(R.menu.fragment_ordonnance_list, menu);
     }
 
+    //When an ordonnance is selected
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
        Ordonnance o = ((OrdonnanceAdapter)getListAdapter()).getItem(position);
         //Start ordonnance activity
-        Intent i = new Intent(getActivity(), OrdonnanceActivity.class);
-        i.putExtra(OrdonnanceFragment.EXTRA_ORDONNANCE_ID, o.getId());
+        Intent i = new Intent(getActivity(), OrdonnanceInfoActivity.class);
+        i.putExtra(OrdonnanceInfoFragment.EXTRA_ORDONNANCE_ID, o.getId());
+        i.putExtra(OrdonnanceInfoFragment.EXTRA_ORDONNANCE_EDITABLE,false);
         startActivity(i);
     }
 
+    //When the add button is pressed
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.menu_item_new_ordonnance:
                 Intent i = new Intent(getActivity(), OrdonnanceInfoActivity.class);
+                i.putExtra(OrdonnanceInfoFragment.EXTRA_ORDONNANCE_EDITABLE,true);
                 startActivity(i);
                 return true;
             default:return super.onOptionsItemSelected(item);
