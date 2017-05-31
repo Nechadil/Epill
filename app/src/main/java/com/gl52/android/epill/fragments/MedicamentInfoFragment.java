@@ -168,9 +168,7 @@ public class MedicamentInfoFragment extends Fragment {
                 }
             }
         });
-
         return v;
-
     }
 
 }
