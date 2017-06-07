@@ -2,16 +2,13 @@ package com.gl52.android.epill.activities;
 
 import android.app.Fragment;
 import android.support.design.widget.TabLayout;
-import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 
 import com.gl52.android.epill.R;
-import com.gl52.android.epill.fragments.MedicamentInfoFragment;
-import com.gl52.android.epill.fragments.MedicamentListFragment;
-import com.gl52.android.epill.fragments.OrdonnanceInfoFragment;
 import com.gl52.android.epill.fragments.OrdonnanceListFragment;
+import com.gl52.android.epill.fragments.SuiviFragment;
 
 public class MainActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
@@ -23,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mFragments= new Fragment[4];
         mFragments[0] = new OrdonnanceListFragment();
-        mFragments[1] = new Fragment();
+        mFragments[1] = new SuiviFragment();
         mFragments[2] = new Fragment();
         mFragments[3] = new Fragment();
         //getFragmentManager().beginTransaction().add(R.id.fragmentContainer,mFragments[0]).commit();
@@ -53,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.addTab(mTabLayout.newTab().setText("Suivi"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Distributor"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Count"));
+       /* Intent intent = new Intent(getBaseContext(), AlertActivity.class);
+        PendingIntent operation = PendingIntent.getActivity(getBaseContext(), (int)System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+5000,operation);
+        Toast.makeText(getBaseContext(), "Alarm  setted", Toast.LENGTH_SHORT).show();*/
+
     }
     private void onTabItemSelected(int position){
         Fragment fragment = null;

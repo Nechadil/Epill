@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
     <TextView
-        android:id="@+id/ordonnance_list_item_name"
+        android:id="@+id/suivi_list_ordonnance_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:text="Ordonnance Name"/>
+        android:text="Prescription name"/>
     <TextView
-        android:id="@+id/ordonnance_list_item_description"
+        android:id="@+id/suivi_list_medicament_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ordonnance_list_item_name"
+        android:layout_below="@id/suivi_list_ordonnance_name"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:paddingTop="4dp"
-        android:text="Ordonnance description"/>
+        android:text="Medicine 1 at 15h"/>
 </RelativeLayout>
+
