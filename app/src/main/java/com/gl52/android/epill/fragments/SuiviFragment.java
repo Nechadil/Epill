@@ -49,11 +49,20 @@ public class SuiviFragment extends Fragment{
             priseFragment.setDate(date.getCalendar());
         }
         });
+        SuiviListFragment priseFragment = (SuiviListFragment) getChildFragmentManager().findFragmentById(R.id.list_suivi);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.list_suivi,new SuiviListFragment()).commit();
+        transaction.add(R.id.list_suivi, new SuiviListFragment()).commit();
         return v;
     }
 
+    //When the fragment is resumed, the calendar will set the last selected date to be focused
+    //Here should set the current date to be selected(Or set the SuiviListFragment to correspond the calendar's selected date)
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCalendar = (MaterialCalendarView) getView().findViewById(R.id.calendarView);
+        mCalendar.setSelectedDate(Calendar.getInstance().getTime());
+    }
 
     //When this fragment is detached, reset the ChildFragmentManager(is  not done in the origin Android code)
     @Override
@@ -70,5 +79,4 @@ public class SuiviFragment extends Fragment{
             throw new RuntimeException(e);
         }
     }
-
 }
