@@ -1,6 +1,7 @@
 package com.gl52.android.epill.fragments;
 
 import android.app.ListFragment;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.gl52.android.epill.R;
 import com.gl52.android.epill.activities.OrdonnanceInfoActivity;
@@ -20,9 +23,10 @@ import com.gl52.android.epill.entities.Ordonnance;
 import com.gl52.android.epill.entities.OrdonnanceLab;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
- * Created by dc on 2017/5/16.
+ * Created by Nechadil on 2017/5/16.
  */
 
 public class OrdonnanceListFragment extends ListFragment {

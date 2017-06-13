@@ -2,21 +2,32 @@ package com.gl52.android.epill.entities;
 
 import android.content.Context;
 
+import com.gl52.android.epill.utils.dbconnection.DBConnection;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 /**
- * Created by dc on 2017/6/7.
+ * Created by Nechadil on 2017/6/7.
  */
 
 public class Schedule {
+    private Context mAppContext;
     private static Schedule sSchedule;
     private ArrayList<PriseMedicament> mPrise;
+    private ArrayList<PriseMedicament> temporaryPrise;
+    private DBConnection db;
 
-    private Context mAppContext;
+    public ArrayList<PriseMedicament> getTemporaryPrise() {
+        return temporaryPrise;
+    }
+
+    public void setTemporaryPrise(ArrayList<PriseMedicament> temporaryPrise) {
+        this.temporaryPrise = temporaryPrise;
+    }
 
     public ArrayList<PriseMedicament> getPrise() {
         return mPrise;
@@ -40,14 +51,28 @@ public class Schedule {
     //initiate the schedule
     private Schedule(Context appContext){
         mAppContext = appContext;
-        mPrise = new ArrayList<PriseMedicament>();
-        PriseMedicament p1 = new PriseMedicament();
+        if(db == null)
+            db = new DBConnection(appContext);
+        //mPrise = new ArrayList<PriseMedicament>();
+        mPrise = db.getSchedule();
+        //PriseMedicament exemple code
+        /*PriseMedicament p1 = new PriseMedicament();
         p1.setDate(Calendar.getInstance().getTime());
         p1.setHour(8);
         p1.setMinute(20);
         p1.setOrdonnanceId("001");
         p1.setMedicamentId("0021");
-        mPrise.add(p1);
+        mPrise.add(p1);*/
+    }
+    //Save the schedule in the schedule table by using the temporary
+    public void addSchedule(){
+        ArrayList<PriseMedicament> prise = this.temporaryPrise;
+        for(PriseMedicament p:prise){
+            mPrise.add(p);
+            Collections.sort(mPrise);
+        }
+        //Clear the attribute when finish the registration
+        this.temporaryPrise = null;
     }
 
     public static Schedule get(Context c){

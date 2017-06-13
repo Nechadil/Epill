@@ -30,7 +30,13 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:digits="0123456789"/>
-
+    <Button
+        android:id="@+id/medicament_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Add time"/>
     <Button
         android:id="@+id/medicament_confirm"
         android:layout_width="match_parent"

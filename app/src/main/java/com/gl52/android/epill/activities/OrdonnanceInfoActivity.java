@@ -11,7 +11,7 @@ import com.gl52.android.epill.fragments.MedicamentListFragment;
 import com.gl52.android.epill.fragments.OrdonnanceInfoFragment;
 
 /**
- * Created by dc on 2017/5/23.
+ * Created by Nechadil on 2017/5/23.
  */
 
 public class OrdonnanceInfoActivity extends AppCompatActivity {

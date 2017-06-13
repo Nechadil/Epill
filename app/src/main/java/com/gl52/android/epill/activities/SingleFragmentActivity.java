@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.gl52.android.epill.R;
 
 /**
- * Created by dc on 2017/5/16.
+ * Created by Nechadil on 2017/5/16.
  */
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {

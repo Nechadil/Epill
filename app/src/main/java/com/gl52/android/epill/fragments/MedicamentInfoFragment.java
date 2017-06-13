@@ -2,26 +2,39 @@ package com.gl52.android.epill.fragments;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
 import com.gl52.android.epill.R;
 
 import com.gl52.android.epill.activities.OrdonnanceInfoActivity;
 import com.gl52.android.epill.entities.Medicament;
 import com.gl52.android.epill.entities.Ordonnance;
 import com.gl52.android.epill.entities.OrdonnanceLab;
+import com.gl52.android.epill.entities.PriseMedicament;
+import com.gl52.android.epill.entities.Schedule;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 
 import static com.gl52.android.epill.fragments.MedicamentListFragment.EXTRA_ORDONNANCE_ID;
 
 /**
- * Created by dc on 2017/5/18.
+ * Created by Nechadil on 2017/5/18.
  */
 
 public class MedicamentInfoFragment extends Fragment {
@@ -29,11 +42,13 @@ public class MedicamentInfoFragment extends Fragment {
     public static String EXTRA_MEDICAMENT_EDITABLE = "com.gl52.android.epill.medicament_editable";
     private String mOrdonnanceId;
     private Medicament mMedicament;
+    private ArrayList<PriseMedicament> mPriseMedicaments;
     private Boolean mEditable;
     private EditText mNameField;
     private EditText mFrequenceField;
     private EditText mDurationField;
     private Button mConfirmButton;
+    private Button mSetTimeButton;
 
     public static MedicamentInfoFragment newInstance(String ordonnanceId, String medicamentId, Boolean editable){
         Bundle args = new Bundle();
@@ -52,6 +67,7 @@ public class MedicamentInfoFragment extends Fragment {
         //Get the medicine with the id
         String medicamentId = (String)getArguments().getString(EXTRA_MEDICAMENT_ID);
         mOrdonnanceId = (String)getArguments().getString(EXTRA_ORDONNANCE_ID);
+        mPriseMedicaments = new ArrayList<PriseMedicament>();
         mEditable = (Boolean)getArguments().getBoolean(EXTRA_MEDICAMENT_EDITABLE);
         if(medicamentId == null){
             mMedicament = new Medicament();
@@ -70,15 +86,19 @@ public class MedicamentInfoFragment extends Fragment {
         mFrequenceField = (EditText)v.findViewById(R.id.medicament_frequence);
         mConfirmButton =(Button)v.findViewById(R.id.medicament_confirm);
         mDurationField = (EditText)v.findViewById(R.id.medicament_duration);
+        mSetTimeButton = (Button)v.findViewById(R.id.medicament_time);
 
         mNameField.setText(mMedicament.getName());
         mFrequenceField.setText(mMedicament.getFrequence());
+        mFrequenceField.setInputType(InputType.TYPE_CLASS_NUMBER);
         mDurationField.setText(mMedicament.getDuration());
+        mDurationField.setInputType(InputType.TYPE_CLASS_NUMBER);
         if(!mEditable){
             mNameField.setEnabled(false);
             mFrequenceField.setEnabled(false);
             mDurationField.setEnabled(false);
             mConfirmButton.setVisibility(View.GONE);
+            mSetTimeButton.setVisibility(View.GONE);
         }
 
 
@@ -108,6 +128,8 @@ public class MedicamentInfoFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mMedicament.setFrequence(s.toString());
+                //When the frequence is changed, the priseMedicament list will be initiated
+                mPriseMedicaments = new ArrayList<PriseMedicament>();
             }
 
             @Override
@@ -133,6 +155,60 @@ public class MedicamentInfoFragment extends Fragment {
             }
         });
 
+        mSetTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String f = mMedicament.getFrequence();
+                if (f != null && Integer.parseInt(f) >= 0){
+                    if(mPriseMedicaments.size() < Integer.parseInt(f)) {
+                        //Set timer for the medicaments
+                        int mFrequence = Integer.parseInt(mMedicament.getFrequence());
+                        Calendar c = Calendar.getInstance();
+                        TimePickerDialog picker = new TimePickerDialog(getActivity(),
+                                new TimePickerDialog.OnTimeSetListener() {
+                                    @Override
+                                    public void onTimeSet(TimePicker tp, int hour, int min) {
+                                        PriseMedicament p = new PriseMedicament();
+                                        //Toast.makeText(getActivity(), hour + "h" + min + "min", Toast.LENGTH_SHORT).show();
+                                        p.setHour(hour);
+                                        p.setMinute(min);
+                                        for (PriseMedicament pm:mPriseMedicaments){
+                                            if(p.compareTo(pm) == 0){
+                                                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity())
+                                                        .setTitle("Error")
+                                                        .setPositiveButton("OK",null);
+                                                alert.setMessage("The time already exists");
+                                                alert.show();
+                                                return;
+                                            }
+                                        }
+                                        mPriseMedicaments.add(p);
+                                        Collections.sort(mPriseMedicaments);
+                                    }
+                                },
+                                c.get(Calendar.HOUR_OF_DAY),
+                                c.get(Calendar.MINUTE),
+                                true);
+                        picker.setTitle("Add medicine take time Number " + (mPriseMedicaments.size() + 1));
+                        picker.show();
+                    } else{
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity())
+                                .setTitle("Error")
+                                .setPositiveButton("OK",null);
+                        alert.setMessage("Already enough medicine take times");
+                        alert.show();
+                    }
+                }
+                else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity())
+                            .setTitle("Error")
+                            .setPositiveButton("OK",null);
+                    alert.setMessage("Please input the medicine's frequence");
+                    alert.show();
+                }
+            }
+        });
+
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,17 +218,40 @@ public class MedicamentInfoFragment extends Fragment {
                 String duration = mMedicament.getDuration();
                 Boolean verified = (name != null)&&(!name.equals(""))
                         &&(frequence != null)&&(!frequence.equals(""))
-                        &&(duration != null)&&(!duration.equals(""));
+                        &&(duration != null)&&(!duration.equals(""))
+                        &&(Integer.parseInt(frequence) == mPriseMedicaments.size());
                 if(verified){
-                    Ordonnance ordonnance = OrdonnanceLab.get(getActivity()).getOrdonnance(mOrdonnanceId);
-                    if(ordonnance == null){
-                        ordonnance = OrdonnanceLab.get(getActivity()).getTemporaryOrdonnance();
-                    }
-                    ordonnance.getMedicaments().add(mMedicament);
-                    Intent i = new Intent(getActivity(), OrdonnanceInfoActivity.class);
-                    i.putExtra(MedicamentListFragment.EXTRA_ORDONNANCE_ID, mOrdonnanceId);
-                    i.putExtra(OrdonnanceInfoFragment.EXTRA_ORDONNANCE_EDITABLE,true);
-                    startActivity(i);
+                            //Save medicament
+                            Ordonnance ordonnance = OrdonnanceLab.get(getActivity()).getOrdonnance(mOrdonnanceId);
+                            if(ordonnance == null){
+                                ordonnance = OrdonnanceLab.get(getActivity()).getTemporaryOrdonnance();
+                            }
+                            String medicamentId = OrdonnanceLab.saveMedicament(mMedicament);
+                            mMedicament.setId(medicamentId);
+                            ordonnance.getMedicaments().add(mMedicament);
+                            ArrayList<PriseMedicament> prise = Schedule.get(getActivity()).getTemporaryPrise();
+                            if (prise == null)
+                                prise = new ArrayList<PriseMedicament>();
+                                Schedule.get(getActivity()).setTemporaryPrise(prise);
+                            for(PriseMedicament p:mPriseMedicaments) {
+                                Calendar calendar = Calendar.getInstance();
+                                p.setDate(calendar.getTime());
+                                p.setMedicamentId(medicamentId);
+                                for(int i=1;i<Integer.parseInt(mMedicament.getDuration());i++){
+                                    PriseMedicament pm = new PriseMedicament();
+                                    pm.setMinute(p.getMinute());
+                                    pm.setHour(p.getHour());
+                                    calendar.add(Calendar.DAY_OF_YEAR,+1);
+                                    pm.setDate(calendar.getTime());
+                                    pm.setId(medicamentId);
+                                    prise.add(pm);
+                                }
+                                prise.add(p);
+                            }
+                            Intent intent = new Intent(getActivity(), OrdonnanceInfoActivity.class);
+                            intent.putExtra(MedicamentListFragment.EXTRA_ORDONNANCE_ID, mOrdonnanceId);
+                            intent.putExtra(OrdonnanceInfoFragment.EXTRA_ORDONNANCE_EDITABLE,true);
+                            startActivity(intent);
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(getActivity())
                             .setTitle("Error")
@@ -163,6 +262,8 @@ public class MedicamentInfoFragment extends Fragment {
                         alert.setMessage("Please input the appropriate frequence");
                     } else if((duration== null)||duration.equals("")||(duration.equals("0"))){
                         alert.setMessage("Please input the appropriate duration");
+                    } else if(Integer.parseInt(frequence) != mPriseMedicaments.size()){
+                        alert.setMessage("Not enough medicine take time added");
                     }
                     alert.show();
                 }

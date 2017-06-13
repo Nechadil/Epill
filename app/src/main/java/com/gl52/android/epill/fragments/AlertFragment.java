@@ -10,7 +10,7 @@ import android.view.WindowManager;
 import com.gl52.android.epill.activities.AlertActivity;
 
 /**
- * Created by dc on 2017/6/6.
+ * Created by Nechadil on 2017/6/6.
  */
 
 public class AlertFragment extends DialogFragment {

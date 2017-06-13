@@ -1,21 +1,22 @@
 package com.gl52.android.epill.entities;
 
 import android.content.Context;
+import android.widget.Toast;
+
+import com.gl52.android.epill.utils.dbconnection.DBConnection;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.UUID;
 
 /**
- * Created by dc on 2017/5/16.
+ * Created by Nechadil on 2017/5/16.
  */
 
 public class OrdonnanceLab {
+    private static DBConnection db;
     private static OrdonnanceLab sOrdonnanceLab;
     private ArrayList<Ordonnance> mOrdonnances;
     private Ordonnance mTemporaryOrdonnance;
     private static int id = 100;
-
     public Ordonnance getTemporaryOrdonnance() {
         return mTemporaryOrdonnance;
     }
@@ -37,14 +38,20 @@ public class OrdonnanceLab {
         }
         return null;
     }
+
     //initiate the ordonnance Lab
     private OrdonnanceLab(Context appContext){
+        //Initiate the dbConnection
+        if(db == null)
+            db = new DBConnection(appContext);
         mAppContext = appContext;
-        mOrdonnances = new ArrayList<Ordonnance>();
+        mOrdonnances = db.getOrdonnanceLab();
+        /*mOrdonnances = new ArrayList<Ordonnance>();
         // TODO: 2017/5/17  Get the ordonnance data from DB
         Ordonnance ordonnance1 = new Ordonnance();
-        ordonnance1.setId("001");
+        //ordonnance1.setId("001");
         ordonnance1.setName("Ordonnance 1");
+        ordonnance1.setMailDoc("maildoc");
         ordonnance1.setDescription("Description for 1");
         ArrayList<Medicament> mLab = new ArrayList<Medicament>();
         Medicament m1 = new Medicament();
@@ -60,6 +67,8 @@ public class OrdonnanceLab {
         ordonnance2.setDescription("Description for 2");
         mOrdonnances.add(ordonnance1);
         mOrdonnances.add(ordonnance2);
+        long l = db.createOrdonnance(ordonnance1);
+        ordonnance1.setName(String.valueOf(l));*/
     }
 
     public static OrdonnanceLab get(Context c){
@@ -71,16 +80,22 @@ public class OrdonnanceLab {
 
     //// TODO: 2017/5/23 Save ordonnance in the DB
     public void  addOrdonnance(Ordonnance ordonnance){
-        if(ordonnance.getId() == null){
-            ordonnance.setId(id+"");
-            id++;
-        }
-        for (Medicament m:ordonnance.getMedicaments()){
-            if(m.getId() == null){
-                m.setId(id+"");
-                id++;
-            }
+        // Save ordonnance and get ordonnanceId as return
+        String oId = db.createOrdonnance(ordonnance);
+        ordonnance.setId(oId);
+        // Save medicaments and get medicamentIds as return
+        for(Medicament m:ordonnance.getMedicaments()){
+            String mId = m.getId();
+            // Save medicament-ordonnance link
+            db.createOMRealation(oId,mId);
         }
         mOrdonnances.add(ordonnance);
+        //Clear the temporaryOrdonnance
+        this.mTemporaryOrdonnance = null;
+    }
+
+    public static String saveMedicament(Medicament m){
+        String medicamentId = db.createMedicament(m);
+        return medicamentId;
     }
 }

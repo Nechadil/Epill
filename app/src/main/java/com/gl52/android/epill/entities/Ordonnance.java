@@ -3,7 +3,7 @@ package com.gl52.android.epill.entities;
 import java.util.ArrayList;
 
 /**
- * Created by dc on 2017/5/16.
+ * Created by Nechadil on 2017/5/16.
  */
 
 public class Ordonnance {
@@ -11,8 +11,9 @@ public class Ordonnance {
     private String name;
     private String mailDoc;
     private String description;
+    private ArrayList<Medicament> mMedicaments;
+
     //To generate an id, to be removed after the insert of the DBConnection
-    private static int sId = 100;
 
     public String getDescription() {
         return description;
@@ -21,8 +22,6 @@ public class Ordonnance {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    private ArrayList<Medicament> mMedicaments;
 
     //Initiacte an ordonnance
     public Ordonnance(){

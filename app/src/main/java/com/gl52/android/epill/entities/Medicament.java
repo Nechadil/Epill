@@ -3,7 +3,7 @@ package com.gl52.android.epill.entities;
 import java.util.ArrayList;
 
 /**
- * Created by dc on 2017/5/16.
+ * Created by Nechadil on 2017/5/16.
  */
 
 public class Medicament {

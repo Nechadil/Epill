@@ -20,7 +20,7 @@ import com.gl52.android.epill.entities.OrdonnanceLab;
 import java.util.ArrayList;
 
 /**
- * Created by dc on 2017/5/17.
+ * Created by Nechadil on 2017/5/17.
  */
 
 public class MedicamentListFragment extends ListFragment {

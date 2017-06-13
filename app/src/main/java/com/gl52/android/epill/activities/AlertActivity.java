@@ -14,7 +14,7 @@ import android.view.WindowManager;
 import com.gl52.android.epill.fragments.AlertFragment;
 
 /**
- * Created by dc on 2017/6/6.
+ * Created by Nechadil on 2017/6/6.
  */
 
 public class AlertActivity extends AppCompatActivity {

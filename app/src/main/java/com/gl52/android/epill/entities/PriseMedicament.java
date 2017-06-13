@@ -1,18 +1,28 @@
 package com.gl52.android.epill.entities;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 /**
- * Created by dc on 2017/6/7.
+ * Created by Nechadil on 2017/6/7.
  */
 
-public class PriseMedicament {
+public class PriseMedicament implements Comparable<PriseMedicament>{
     private String id;
     private String medicamentId;
-    private String ordonnanceId;
     private int hour;
     private int minute;
     private Date date;
+    private String ordonnanceId;
+
+    public String getOrdonnanceId() {
+        return ordonnanceId;
+    }
+
+    public void setOrdonnanceId(String ordonnanceId) {
+        this.ordonnanceId = ordonnanceId;
+    }
 
     public String getId() {
         return id;
@@ -38,14 +48,6 @@ public class PriseMedicament {
         this.medicamentId = medicamentId;
     }
 
-    public String getOrdonnanceId() {
-        return ordonnanceId;
-    }
-
-    public void setOrdonnanceId(String ordonnanceId) {
-        this.ordonnanceId = ordonnanceId;
-    }
-
     public int getHour() {
         return hour;
     }
@@ -60,5 +62,21 @@ public class PriseMedicament {
 
     public void setMinute(int minute) {
         this.minute = minute;
+    }
+
+    @Override
+    public int compareTo(PriseMedicament p) {
+        if (hour < p.getHour())
+            return -1;
+        else if (hour > p.getHour())
+            return 1;
+        else {
+            if (minute < p.getMinute())
+                return -1;
+            else if (minute > p.getMinute())
+                return 1;
+            else
+                return 0;
+        }
     }
 }

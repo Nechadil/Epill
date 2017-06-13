@@ -6,7 +6,7 @@ import com.gl52.android.epill.fragments.MedicamentInfoFragment;
 import com.gl52.android.epill.fragments.MedicamentListFragment;
 
 /**
- * Created by dc on 2017/5/18.
+ * Created by Nechadil on 2017/5/18.
  */
 
 public class MedicamentInfoActivity extends SingleFragmentActivity {

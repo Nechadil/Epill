@@ -1,25 +1,36 @@
 package com.gl52.android.epill.fragments;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.gl52.android.epill.R;
 import com.gl52.android.epill.activities.MainActivity;
 import com.gl52.android.epill.activities.MedicamentInfoActivity;
+import com.gl52.android.epill.entities.Medicament;
 import com.gl52.android.epill.entities.Ordonnance;
 import com.gl52.android.epill.entities.OrdonnanceLab;
+import com.gl52.android.epill.entities.Schedule;
+
+import java.util.Calendar;
 
 /**
- * Created by dc on 2017/5/23.
+ * Created by Nechadil on 2017/5/23.
  */
 
 public class OrdonnanceInfoFragment extends Fragment {
@@ -69,6 +80,7 @@ public class OrdonnanceInfoFragment extends Fragment {
         View v = inflater.inflate(R.layout.info_ordonnance, parent, false);
         mNameField = (EditText) v.findViewById(R.id.ordonnance_name);
         mMailDocField = (EditText) v.findViewById(R.id.ordonnance_mailDoc);
+        mMailDocField.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         mDescriptionField = (EditText) v.findViewById(R.id.ordonnance_description);
         mConfirmButton = (Button) v.findViewById(R.id.medicament_confirm);
         mAddButton = (Button) v.findViewById(R.id.medicament_add);
@@ -140,6 +152,7 @@ public class OrdonnanceInfoFragment extends Fragment {
                                 &&(mOrdonnance.getMedicaments().size()>0);
                 if(verified){
                     OrdonnanceLab.get(getActivity()).addOrdonnance(mOrdonnance);
+                    Schedule.get(getActivity()).addSchedule();
                     Intent i = new Intent(getActivity(), MainActivity.class);
                     startActivity(i);
                 } else {
