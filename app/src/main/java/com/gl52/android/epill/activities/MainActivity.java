@@ -1,10 +1,15 @@
 package com.gl52.android.epill.activities;
 
+import android.app.AlarmManager;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
@@ -14,6 +19,7 @@ import android.widget.Toast;
 
 
 import com.gl52.android.epill.R;
+import com.gl52.android.epill.fragments.AlertFragment;
 import com.gl52.android.epill.fragments.OrdonnanceListFragment;
 import com.gl52.android.epill.fragments.SuiviFragment;
 
@@ -92,12 +98,6 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.addTab(mTabLayout.newTab().setText("List"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Box"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Count"));
-       /* Intent intent = new Intent(getBaseContext(), AlertActivity.class);
-        PendingIntent operation = PendingIntent.getActivity(getBaseContext(), (int)System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+5000,operation);
-        Toast.makeText(getBaseContext(), "Alarm  setted", Toast.LENGTH_SHORT).show();*/
 
     }
     private void onTabItemSelected(int position){

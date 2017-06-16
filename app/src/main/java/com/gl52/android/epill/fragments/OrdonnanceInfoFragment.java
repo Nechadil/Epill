@@ -1,10 +1,13 @@
 package com.gl52.android.epill.fragments;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,6 +23,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.gl52.android.epill.R;
+import com.gl52.android.epill.activities.AlertActivity;
 import com.gl52.android.epill.activities.MainActivity;
 import com.gl52.android.epill.activities.MedicamentInfoActivity;
 import com.gl52.android.epill.entities.Medicament;
@@ -151,8 +155,8 @@ public class OrdonnanceInfoFragment extends Fragment {
                                 &&(mOrdonnance.getMedicaments()!= null)
                                 &&(mOrdonnance.getMedicaments().size()>0);
                 if(verified){
-                    OrdonnanceLab.get(getActivity()).addOrdonnance(mOrdonnance);
-                    Schedule.get(getActivity()).addSchedule();
+                    String oId = OrdonnanceLab.get(getActivity()).addOrdonnance(mOrdonnance);
+                    Schedule.get(getActivity()).addSchedule(oId);
                     Intent i = new Intent(getActivity(), MainActivity.class);
                     startActivity(i);
                 } else {

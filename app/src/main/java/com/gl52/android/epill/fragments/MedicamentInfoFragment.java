@@ -1,8 +1,11 @@
 package com.gl52.android.epill.fragments;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 
 import com.gl52.android.epill.R;
 
+import com.gl52.android.epill.activities.AlertActivity;
 import com.gl52.android.epill.activities.OrdonnanceInfoActivity;
 import com.gl52.android.epill.entities.Medicament;
 import com.gl52.android.epill.entities.Ordonnance;
@@ -30,6 +34,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.UUID;
 
 import static com.gl52.android.epill.fragments.MedicamentListFragment.EXTRA_ORDONNANCE_ID;
 
@@ -221,13 +226,15 @@ public class MedicamentInfoFragment extends Fragment {
                         &&(duration != null)&&(!duration.equals(""))
                         &&(Integer.parseInt(frequence) == mPriseMedicaments.size());
                 if(verified){
-                            //Save medicament
+                    Intent intent = new Intent(getActivity().getBaseContext(), AlertActivity.class);
+                    //Each time the request code should be unique to set different alarms
+                    AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                    //Save medicament
                             Ordonnance ordonnance = OrdonnanceLab.get(getActivity()).getOrdonnance(mOrdonnanceId);
                             if(ordonnance == null){
                                 ordonnance = OrdonnanceLab.get(getActivity()).getTemporaryOrdonnance();
                             }
                             String medicamentId = OrdonnanceLab.saveMedicament(mMedicament);
-                            mMedicament.setId(medicamentId);
                             ordonnance.getMedicaments().add(mMedicament);
                             ArrayList<PriseMedicament> prise = Schedule.get(getActivity()).getTemporaryPrise();
                             if (prise == null)
@@ -235,23 +242,42 @@ public class MedicamentInfoFragment extends Fragment {
                                 Schedule.get(getActivity()).setTemporaryPrise(prise);
                             for(PriseMedicament p:mPriseMedicaments) {
                                 Calendar calendar = Calendar.getInstance();
+                                int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+                                int currentMinute = calendar.get(Calendar.MINUTE);
+                                //When the current time is later than the pill take time, this pill take will start from tomorrow
+                                if(p.getHour()<currentHour || (p.getHour()==currentHour && p.getMinute() <= currentMinute)){
+                                    calendar.add(Calendar.DAY_OF_YEAR,+1);
+                                };
+                                calendar.set(Calendar.HOUR_OF_DAY,0);
+                                calendar.set(Calendar.MINUTE,0);
+                                calendar.set(Calendar.SECOND,0);
                                 p.setDate(calendar.getTime());
                                 p.setMedicamentId(medicamentId);
+                                Date date = new Date(p.toLong());
+                                PendingIntent operation = PendingIntent.getActivity(getActivity().getBaseContext(), (int)System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                alarmManager.set(AlarmManager.RTC_WAKEUP,p.toLong(),operation);
+                                Toast.makeText(getActivity().getBaseContext(), "Alarm set at"+date.toString(), Toast.LENGTH_SHORT).show();
                                 for(int i=1;i<Integer.parseInt(mMedicament.getDuration());i++){
                                     PriseMedicament pm = new PriseMedicament();
                                     pm.setMinute(p.getMinute());
                                     pm.setHour(p.getHour());
                                     calendar.add(Calendar.DAY_OF_YEAR,+1);
                                     pm.setDate(calendar.getTime());
-                                    pm.setId(medicamentId);
+                                    pm.setMedicamentId(medicamentId);
                                     prise.add(pm);
+                                    //alarmManager.set(AlarmManager.RTC_WAKEUP,pm.toLong(),operation);
+                                    date.setTime(pm.toLong());
+                                    //Different alarm should use different request code
+                                    operation = PendingIntent.getActivity(getActivity().getBaseContext(), UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    alarmManager.set(AlarmManager.RTC_WAKEUP,pm.toLong(),operation);
+                                    Toast.makeText(getActivity().getBaseContext(), "Alarm set at"+date.toString(), Toast.LENGTH_SHORT).show();
                                 }
                                 prise.add(p);
                             }
-                            Intent intent = new Intent(getActivity(), OrdonnanceInfoActivity.class);
-                            intent.putExtra(MedicamentListFragment.EXTRA_ORDONNANCE_ID, mOrdonnanceId);
-                            intent.putExtra(OrdonnanceInfoFragment.EXTRA_ORDONNANCE_EDITABLE,true);
-                            startActivity(intent);
+                            Intent i = new Intent(getActivity(), OrdonnanceInfoActivity.class);
+                            i.putExtra(MedicamentListFragment.EXTRA_ORDONNANCE_ID, mOrdonnanceId);
+                            i.putExtra(OrdonnanceInfoFragment.EXTRA_ORDONNANCE_EDITABLE,true);
+                            startActivity(i);
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(getActivity())
                             .setTitle("Error")

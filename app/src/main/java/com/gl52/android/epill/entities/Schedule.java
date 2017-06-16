@@ -55,25 +55,19 @@ public class Schedule {
             db = new DBConnection(appContext);
         //mPrise = new ArrayList<PriseMedicament>();
         mPrise = db.getSchedule();
-        //PriseMedicament exemple code
-        /*PriseMedicament p1 = new PriseMedicament();
-        p1.setDate(Calendar.getInstance().getTime());
-        p1.setHour(8);
-        p1.setMinute(20);
-        p1.setOrdonnanceId("001");
-        p1.setMedicamentId("0021");
-        mPrise.add(p1);*/
     }
     //Save the schedule in the schedule table by using the temporary
-    public void addSchedule(){
+    public void addSchedule(String oId){
         ArrayList<PriseMedicament> prise = this.temporaryPrise;
         for(PriseMedicament p:prise){
+            p.setOrdonnanceId(oId);
+            db.createPrise(p);
             mPrise.add(p);
             Collections.sort(mPrise);
         }
-        //Clear the attribute when finish the registration
         this.temporaryPrise = null;
     }
+
 
     public static Schedule get(Context c){
         if(sSchedule == null){

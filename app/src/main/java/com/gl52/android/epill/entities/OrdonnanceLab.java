@@ -45,30 +45,9 @@ public class OrdonnanceLab {
         if(db == null)
             db = new DBConnection(appContext);
         mAppContext = appContext;
+        //This method is used to clear the database
+        //db.clear(db.getWritableDatabase());
         mOrdonnances = db.getOrdonnanceLab();
-        /*mOrdonnances = new ArrayList<Ordonnance>();
-        // TODO: 2017/5/17  Get the ordonnance data from DB
-        Ordonnance ordonnance1 = new Ordonnance();
-        //ordonnance1.setId("001");
-        ordonnance1.setName("Ordonnance 1");
-        ordonnance1.setMailDoc("maildoc");
-        ordonnance1.setDescription("Description for 1");
-        ArrayList<Medicament> mLab = new ArrayList<Medicament>();
-        Medicament m1 = new Medicament();
-        m1.setName("medicament 1 ");
-        m1.setId("0021");
-        m1.setDuration("10");
-        m1.setFrequence("3");
-        mLab.add(m1);
-        ordonnance1.setMedicaments(mLab);
-        Ordonnance ordonnance2 = new Ordonnance();
-        ordonnance2.setId("002");
-        ordonnance2.setName("Ordonnance 2");
-        ordonnance2.setDescription("Description for 2");
-        mOrdonnances.add(ordonnance1);
-        mOrdonnances.add(ordonnance2);
-        long l = db.createOrdonnance(ordonnance1);
-        ordonnance1.setName(String.valueOf(l));*/
     }
 
     public static OrdonnanceLab get(Context c){
@@ -79,7 +58,7 @@ public class OrdonnanceLab {
     }
 
     //// TODO: 2017/5/23 Save ordonnance in the DB
-    public void  addOrdonnance(Ordonnance ordonnance){
+    public String  addOrdonnance(Ordonnance ordonnance){
         // Save ordonnance and get ordonnanceId as return
         String oId = db.createOrdonnance(ordonnance);
         ordonnance.setId(oId);
@@ -92,10 +71,12 @@ public class OrdonnanceLab {
         mOrdonnances.add(ordonnance);
         //Clear the temporaryOrdonnance
         this.mTemporaryOrdonnance = null;
+        return oId;
     }
 
     public static String saveMedicament(Medicament m){
         String medicamentId = db.createMedicament(m);
+        m.setId(medicamentId);
         return medicamentId;
     }
 }

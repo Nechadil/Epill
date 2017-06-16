@@ -14,11 +14,12 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.MedicamentInfoActivity"/>
         <activity android:name=".activities.OrdonnanceInfoActivity"/>
-        <activity android:name=".activities.AlertActivity"/>
+        <activity android:name=".activities.AlertActivity"
+          android:theme="@android:style/Theme.Translucent">
+        </activity>
         <activity android:name=".activities.MainActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN"/>
-
             <category android:name="android.intent.category.LAUNCHER"/>
         </intent-filter>
         </activity>

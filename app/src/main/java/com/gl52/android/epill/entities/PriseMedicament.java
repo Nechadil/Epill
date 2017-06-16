@@ -2,6 +2,7 @@ package com.gl52.android.epill.entities;
 
 import android.support.annotation.NonNull;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -78,5 +79,9 @@ public class PriseMedicament implements Comparable<PriseMedicament>{
             else
                 return 0;
         }
+    }
+
+    public long toLong(){
+        return getDate().getTime()+getMinute()*60*1000+getHour()*60*60*1000;
     }
 }

@@ -204,6 +204,8 @@ public class DBConnection extends SQLiteOpenHelper{
             p.setId(c.getString(c.getColumnIndex(KEY_ROWID)));
             p.setHour(c.getInt(c.getColumnIndex(KEY_PRISE_HOUR)));
             p.setMinute(c.getInt(c.getColumnIndex(KEY_PRISE_MINUTE)));
+            p.setOrdonnanceId(c.getString(c.getColumnIndex(KEY_PRISE_ORDONNANCEID)));
+            p.setMedicamentId(c.getString(c.getColumnIndex(KEY_PRISE_MEDICAMENTID)));
             String date = c.getString(c.getColumnIndex(KEY_PRISE_DATE));
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -235,6 +237,13 @@ public class DBConnection extends SQLiteOpenHelper{
             return m;
         }
         return null;
+    }
+    public void clear(SQLiteDatabase db){
+        db.execSQL("DROP TABLE IF EXISTS " + MEDICAMENT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + ORDONNANCE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CONTENIR_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + PRISEMEDICAMENT_TABLE);
+        onCreate(db);
     }
 
 }
