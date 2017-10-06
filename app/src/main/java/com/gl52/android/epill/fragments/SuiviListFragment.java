@@ -4,16 +4,20 @@ package com.gl52.android.epill.fragments;
 
 import android.app.Fragment;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gl52.android.epill.R;
+import com.gl52.android.epill.activities.AlertActivity;
+import com.gl52.android.epill.activities.OrdonnanceInfoActivity;
 import com.gl52.android.epill.entities.Medicament;
 import com.gl52.android.epill.entities.Ordonnance;
 import com.gl52.android.epill.entities.OrdonnanceLab;
@@ -63,6 +67,7 @@ public class SuiviListFragment extends ListFragment {
             description.setText(medicament.getName()+" to be taken at "+p.getHour()+"h "+p.getMinute()+"m" );
             return convertView;
         }
-    }
 
+    }
+    
 }

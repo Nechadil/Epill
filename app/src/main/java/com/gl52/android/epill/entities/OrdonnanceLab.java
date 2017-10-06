@@ -45,8 +45,6 @@ public class OrdonnanceLab {
         if(db == null)
             db = new DBConnection(appContext);
         mAppContext = appContext;
-        //This method is used to clear the database
-        //db.clear(db.getWritableDatabase());
         mOrdonnances = db.getOrdonnanceLab();
     }
 

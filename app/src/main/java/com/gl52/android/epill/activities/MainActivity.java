@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,42 +38,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mFragments= new Fragment[4];
+        mFragments= new Fragment[2];
         mFragments[0] = new SuiviFragment();
         mFragments[1] = new OrdonnanceListFragment();
-        mFragments[2] = new Fragment();
-        mFragments[3] = new Fragment();
         getFragmentManager().beginTransaction().add(R.id.fragmentContainer,mFragments[0]).commit();
         initView();
-       /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                InputStream is = null;
-                try {
-                    BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-                    Set<BluetoothDevice> set = adapter.getBondedDevices();
-                    BluetoothDevice device;
-                    for(BluetoothDevice b: set){
-                        if (b.getName().equals("Adafruit Bluefruit LE")){
-                            device = b;
-                        }
-                    }
-                    UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-                    BluetoothServerSocket serverSocket = adapter.listenUsingRfcommWithServiceRecord("serverSocket", uuid);
-                    Handler mHandler = new Handler(getApplicationContext().getMainLooper());
-                    mHandler.sendEmptyMessage(1);
-                    BluetoothSocket accept = serverSocket.accept();
-                    is = accept.getInputStream();
-
-                    byte[] bytes = new byte[1024];
-                    int length = is.read(bytes);
-                    Toast.makeText(MainActivity.this, "xxxx", Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();*/
     }
     private void initView(){
         mTabLayout = (TabLayout)findViewById(R.id.bottom_tab_layout);
@@ -96,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         mTabLayout.addTab(mTabLayout.newTab().setText("Suivi"));
         mTabLayout.addTab(mTabLayout.newTab().setText("List"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Box"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Count"));
 
     }
     private void onTabItemSelected(int position){

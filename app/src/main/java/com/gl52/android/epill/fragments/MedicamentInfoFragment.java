@@ -265,12 +265,10 @@ public class MedicamentInfoFragment extends Fragment {
                                     pm.setDate(calendar.getTime());
                                     pm.setMedicamentId(medicamentId);
                                     prise.add(pm);
-                                    //alarmManager.set(AlarmManager.RTC_WAKEUP,pm.toLong(),operation);
                                     date.setTime(pm.toLong());
                                     //Different alarm should use different request code
                                     operation = PendingIntent.getActivity(getActivity().getBaseContext(), UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                     alarmManager.set(AlarmManager.RTC_WAKEUP,pm.toLong(),operation);
-                                    Toast.makeText(getActivity().getBaseContext(), "Alarm set at"+date.toString(), Toast.LENGTH_SHORT).show();
                                 }
                                 prise.add(p);
                             }

@@ -23,8 +23,8 @@ public class AlertFragment extends DialogFragment {
         builder.setTitle("Epill");
         //Making it so notification can only go away by pressing the buttons
         setCancelable(false);
-        builder.setMessage("Time to take pill?");
-        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+        builder.setMessage("Time to take pill");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 getActivity().finish();

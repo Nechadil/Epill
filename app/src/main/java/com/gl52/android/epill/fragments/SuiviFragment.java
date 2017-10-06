@@ -38,7 +38,6 @@ public class SuiviFragment extends Fragment{
         View v = inflater.inflate(R.layout.info_suivi,container,false);
         mCalendar = (MaterialCalendarView) v.findViewById(R.id.calendarView);
         mCalendar.state().edit().setMinimumDate(CalendarDay.from(2017, 5, 1))
-                .setMaximumDate(CalendarDay.from(2017, 7, 1))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();
         mCalendar.setSelectedDate(Calendar.getInstance().getTime());

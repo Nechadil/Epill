@@ -238,12 +238,4 @@ public class DBConnection extends SQLiteOpenHelper{
         }
         return null;
     }
-    public void clear(SQLiteDatabase db){
-        db.execSQL("DROP TABLE IF EXISTS " + MEDICAMENT_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + ORDONNANCE_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + CONTENIR_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + PRISEMEDICAMENT_TABLE);
-        onCreate(db);
-    }
-
 }
